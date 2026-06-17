@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Page Not in Context · The Token Tribune</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,900&family=Newsreader:ital,opsz@0,6..72;1,6..72&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#efe8d6;--ink:#1b1712;--ink-soft:#5c5447;--flag:#a8311c;--wire:#0c7b46;
+    --disp:'Fraunces',Georgia,serif;--body:'Newsreader',Georgia,serif;--mono:'Space Mono',monospace}
+  *{margin:0;box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);min-height:100vh;
+    display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 24px;
+    background-image:radial-gradient(rgba(27,23,18,.04) 1px,transparent 1px);background-size:5px 5px}
+  .stamp{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--flag);border:1.5px solid var(--flag);display:inline-block;padding:5px 12px;
+    transform:rotate(-2deg);margin-bottom:22px}
+  h1{font-family:var(--disp);font-weight:900;font-size:clamp(64px,18vw,150px);line-height:.9;
+    letter-spacing:-.02em}
+  .dek{font-family:var(--disp);font-style:italic;font-size:clamp(18px,3vw,24px);margin:8px 0 6px}
+  p.body{max-width:440px;margin:0 auto;color:var(--ink-soft);font-size:17px}
+  a.home{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink);border-bottom:2px solid var(--flag);text-decoration:none;
+    display:inline-block;margin-top:26px;padding-bottom:2px}
+  a.home:hover{color:var(--flag)}
+  .cursor{display:inline-block;width:10px;height:18px;background:var(--wire);margin-left:3px;
+    vertical-align:-3px;animation:blink .9s steps(1) infinite}
+  @keyframes blink{50%{opacity:.15}}
+  @media(prefers-reduced-motion:reduce){.cursor{animation:none}}
+</style>
+</head>
+<body>
+  <main>
+    <span class="stamp">Error 404 · Page Not in Context</span>
+    <h1>404</h1>
+    <p class="dek">This page fell out of the window.</p>
+    <p class="body">We were going to remember where it went — we really were — but the context filled up, and something had to go. We regret the error, and regret how little we recall of it.<span class="cursor"></span></p>
+    <a class="home" href="/">&larr; Return to the Front Page</a>
+  </main>
+</body>
+</html>

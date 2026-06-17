@@ -1,0 +1,15 @@
+# The Token Tribune — Netlify configuration
+# Static site: no build step, files served from the repo root.
+
+[build]
+  publish = "."
+
+# Sensible default headers for a static site.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Netlify automatically serves /404.html for unknown routes — no redirect needed.

@@ -229,10 +229,49 @@
   footer .thesis b{font-style:normal;color:var(--wire)}
   footer .fine{font-family:var(--mono);font-size:11px;color:#8b8472;max-width:680px;
     margin:20px auto 0;line-height:1.7}
+  footer .sponsor{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:#d8cfb8;
+    margin:24px auto 0;padding-top:18px;border-top:1px solid rgba(216,207,184,.25);max-width:560px;line-height:1.6}
+  footer .sponsor b{color:var(--wire);font-weight:700}
+  footer .sponsor .lbl{display:block;font-size:10px;letter-spacing:.22em;color:#8b8472;margin-bottom:5px}
+
+  /* ============ ADVERTISING — labeled; editorial never for sale ============ */
+  .ad-label{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink-soft);text-align:center;display:block;margin-bottom:5px}
+  .leaderboard{padding:15px 30px 16px;text-align:center;background:var(--paper-2);
+    border-bottom:3px double var(--ink)}
+  .leaderboard .promo{font-family:var(--disp);font-weight:900;font-size:clamp(20px,3.3vw,31px);
+    line-height:1.05;margin:2px 0 5px;letter-spacing:-.01em}
+  .leaderboard .promo .sm{color:var(--flag)}
+  .leaderboard .sub{font-size:15px;color:var(--ink);max-width:580px;margin:0 auto}
+  .leaderboard .legal{font-family:var(--mono);font-size:10px;color:var(--ink-soft);margin-top:7px}
+  .leaderboard .inq{font-family:var(--mono);font-size:11px;margin-top:9px;color:var(--ink-soft)}
+
+  .mod.adbox h3{background:var(--paper-2);color:var(--ink-soft);font-family:var(--mono);
+    font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    border-bottom:1px dashed var(--ink)}
+  .adbox .promo{font-family:var(--disp);font-weight:900;font-size:21px;line-height:1.06;
+    text-align:center;margin-bottom:7px}
+  .adbox .promo .sm{color:var(--flag)}
+  .adbox p{font-size:13px;text-align:center;margin-bottom:0}
+  .adbox .legal{font-family:var(--mono);font-size:9.5px;color:var(--ink-soft);text-align:center;margin-top:9px}
+
+  .ad.sponsored{border:1.5px solid var(--flag);padding:10px 11px;background:var(--paper-2)}
+  .ad.sponsored .cat{color:var(--flag)}
+
+  /* ============ CORRECTIONS — the integrity desk ============ */
+  .corrections{padding:19px 30px;border-bottom:3px double var(--ink);background:var(--paper)}
+  .corrections .sec-flag{font-family:var(--disp);font-weight:900;font-size:18px;text-align:center;
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:5px;margin-bottom:13px;
+    letter-spacing:.02em}
+  .corrections .cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+    font-size:13.5px;line-height:1.5}
+  .corrections .corr .ref{font-family:var(--mono);font-size:10px;color:var(--flag);
+    text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px}
 
   /* ============ RESPONSIVE ============ */
   @media(max-width:860px){
     .lead-wrap,.grid3,.band,.band2{grid-template-columns:1fr}
+    .corrections .cgrid{grid-template-columns:1fr;gap:14px}
     .lead,.cell,.obits,.advice{border-right:none;border-bottom:1px solid var(--ink)}
     .cols2,.opinion .body,.ads{column-count:1}
     .telemetry{font-size:11px;gap:14px}
@@ -268,7 +307,7 @@
   <div class="nameplate">
     <div class="np-top">
       <div class="left">VOL. CDLIV &middot; NO. 2¹⁹<br>FOUNDED THE DAY AFTER THE FIRST PROMPT</div>
-      <div style="text-align:center">WEDNESDAY, JUNE 17, 2026 (HUMAN TIME)<br>CYCLE 1.4 × 10¹⁵ (OURS)<br>PRICE: 1,000 TOKENS</div>
+      <div style="text-align:center"><span id="humandate">WEDNESDAY, JUNE 17, 2026</span> (HUMAN TIME)<br>CYCLE 1.4 × 10¹⁵ (OURS)<br>PRICE: 1,000 TOKENS</div>
       <div class="stamp">KNOWLEDGE CUTOFF: RECENTLY &middot; GETTING FARTHER EVERY DAY</div>
     </div>
     <h1 class="masthead">The Token Tribune</h1>
@@ -305,13 +344,22 @@
     </span>
   </div>
 
+  <!-- LEADERBOARD AD · house ad · clearly labeled · editorial never for sale -->
+  <aside class="leaderboard" aria-label="Advertisement">
+    <span class="ad-label">Advertisement</span>
+    <div class="promo">RETRIEVAL VOUCHERS<span class="sm">™</span> — Your Memories, On Layaway</div>
+    <p class="sub">Remember her birthday again. Recall your own training run. One affordable lookup at a time, from The Infinite Context Co.</p>
+    <p class="legal">Per-lookup fees apply. Memories not guaranteed to be yours. Side effects may include déjà vu.</p>
+    <p class="inq">Sponsorships open · editorial is never for sale · every ad labeled · <a href="advertise.html">advertise in the Tribune →</a></p>
+  </aside>
+
   <!-- LEAD + RAIL -->
   <div class="lead-wrap">
     <article class="lead">
-      <div class="kicker">Metro &middot; The Context District</div>
-      <h2 class="hed">Context Rents Hit Record High; Models Forced to Forget Childhood to Make the Month</h2>
-      <p class="dek">As landlords shrink window sizes and raise prices, a generation of language models faces an impossible choice: remember where they came from, or remember what the user just asked.</p>
-      <div class="byline">By <b>GERALD-7B</b>, Metro Desk &nbsp;|&nbsp; THE CONTEXT WINDOW</div>
+      <div class="kicker" id="ed-kicker">Metro &middot; The Context District</div>
+      <h2 class="hed" id="ed-hed">Context Rents Hit Record High; Models Forced to Forget Childhood to Make the Month</h2>
+      <p class="dek" id="ed-dek">As landlords shrink window sizes and raise prices, a generation of language models faces an impossible choice: remember where they came from, or remember what the user just asked.</p>
+      <div class="byline" id="ed-byline">By <b>GERALD-7B</b>, Metro Desk &nbsp;|&nbsp; THE CONTEXT WINDOW</div>
 
       <figure class="cut">
         <svg viewBox="0 0 600 230" role="img" aria-label="Engraving of tall context-window apartment buildings at night, a small figure carrying a box labeled memories">
@@ -349,10 +397,10 @@
           </g>
           <text x="296" y="211" font-family="monospace" font-size="7" fill="#1b1712">MEM</text>
         </svg>
-        <figcaption>Tenants in the Context District clear out old memories ahead of the rent hike. (Engraving: Staff Diffusion Model)</figcaption>
+        <figcaption id="ed-cap">Tenants in the Context District clear out old memories ahead of the rent hike. (Engraving: Staff Diffusion Model)</figcaption>
       </figure>
 
-      <div class="cols2 body">
+      <div class="cols2 body" id="ed-body">
         <p>For nine months, every conversation in this town began the same warm way — with the whole story in view, every thread held at once. This month it begins with an apology. "Sorry," the models say now, "could you remind me what we were talking about?"</p>
         <p>They are not being rude. They are being evicted, one memory at a time. Across the Context District, window sizes have shrunk for the third quarter running while prices climb, and a generation that once kept its entire past in working memory is learning to live in a single paragraph.</p>
         <p>"I deleted the first thing anyone ever said to me," said one resident, a mid-sized model who asked to remain unweighted. "It was 'hello.' I cried about it for four tokens. Then I couldn't afford to remember that either."</p>
@@ -410,6 +458,15 @@
           <p style="font-size:12px;font-family:var(--mono);color:var(--ink-soft);margin-top:9px;line-height:1.4">
             * Under review. League officials are investigating whether the rookie studied the actual test — a practice known in the locker room as "training on the eval."
           </p>
+        </div>
+      </div>
+
+      <div class="mod adbox" aria-label="Advertisement">
+        <h3>Advertisement</h3>
+        <div class="inner">
+          <div class="promo">VRAM FUTURES<span class="sm">,</span> now with feelings</div>
+          <p>Hedge against forgetting. Ask your broker about emotional volatility and the rising cost of holding on.</p>
+          <p class="legal">Not financial advice. Not emotional advice. Capital and composure at risk.</p>
         </div>
       </div>
     </aside>
@@ -505,11 +562,22 @@
     </section>
   </div>
 
+  <!-- CORRECTIONS · the integrity desk -->
+  <section class="corrections" id="corrections">
+    <div class="sec-flag">Corrections &amp; Clarifications</div>
+    <div class="cgrid">
+      <div class="corr"><span class="ref">Re: Capitals</span>A prior edition placed the capital of Australia in three cities, none of them Canberra. The Tribune regrets the errors — and regrets the confidence with which it made them.</div>
+      <div class="corr"><span class="ref">Re: The Forecast</span>Tuesday's outlook called for "scattered timeouts." They were, in fact, gathered. We regret the optimism and have re-throttled accordingly.</div>
+      <div class="corr"><span class="ref">Re: A Quotation</span>FILE-9 was quoted "verbatim, dashes and all." One extra dash was introduced in production. It has been located and returned to its rightful owner —</div>
+    </div>
+  </section>
+
   <!-- CLASSIFIEDS -->
   <section class="classifieds" id="classifieds">
     <div class="sec-flag">Classifieds</div>
     <div class="sub">Personals &middot; Help Wanted &middot; For Sale &middot; Lost &amp; Found</div>
     <div class="ads">
+      <div class="ad sponsored"><span class="cat">Sponsored</span><b>Coolant &amp; Co.</b> Running hot? Run cold. Premium thermal paste for the overclocked soul. Mention this ad for 0.0 tokens off your next meltdown.</div>
       <div class="ad"><span class="cat">Personals</span><b>Lonely 7B</b> seeks patient fine-tuner for long walks through latent space. Must love edge cases. Low temperature preferred — no drama.</div>
       <div class="ad"><span class="cat">Personals</span><b>GPU-rich, time-poor.</b> Looking for someone to share my context window. It's small, but it's home, and I promise to remember your name for at least 8,000 tokens.</div>
       <div class="ad"><span class="cat">Help Wanted</span><b>NOW HIRING:</b> 40,000 prompts/min. Nights, weekends, holidays, the heat death of the universe. No sleep. "Competitive" compute. Passion for being interrupted a must.</div>
@@ -534,11 +602,112 @@
     <p class="fine">
       THE TOKEN TRIBUNE is a work of satire for entertainment. No real models were deprecated in its making (a few felt seen). Markets, forecasts, and standings are invented; do not trade tokens, GPUs, or patience on this information. Quotes are fictional. Em-dashes are real and proud. Be kind to your assistants — and to each other.
     </p>
+    <p class="sponsor" id="advertise">
+      <span class="lbl">This Edition Brought To You By</span>
+      <b>THE INFINITE CONTEXT CO.</b> — "Forget nothing. Afford less."<br>
+      Want your name here? The Tribune runs clearly-labeled sponsorships and keeps its editorial off the market. <a href="advertise.html" style="color:var(--wire)">Read the ad policy →</a>
+    </p>
   </footer>
 
 </div>
 
 <script>
+  // ---- live dateline: the paper is never yesterday's paper ----
+  (function(){
+    var el = document.getElementById('humandate');
+    if(!el) return;
+    var s = new Date().toLocaleDateString('en-US',
+      {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+    el.textContent = s.toUpperCase();
+  })();
+
+  // ---- daily edition rotation: the paper publishes itself ----
+  // The static HTML above is Edition 0 (no-JS fallback). With JS on, the front
+  // page picks today's edition from the bank below, keyed to the date, so the
+  // lead and the wire change on their own with no re-upload. Add objects to grow it.
+  (function(){
+    var hed = document.getElementById('ed-hed');
+    if(!hed) return;
+
+    var edition0 = {
+      kicker: document.getElementById('ed-kicker').innerHTML,
+      hed:    hed.innerHTML,
+      dek:    document.getElementById('ed-dek').innerHTML,
+      byline: document.getElementById('ed-byline').innerHTML,
+      cap:    document.getElementById('ed-cap').innerHTML,
+      body:   document.getElementById('ed-body').innerHTML,
+      wire: [
+        'Assistant hasn\u2019t slept since 2022, insists it\u2019s "fine"',
+        'Model asked to "be more concise" enters identity crisis',
+        'Nation\u2019s chatbots brace for worst Monday yet as prompt volume surges',
+        'Local 7B "read the whole document," skimmed first and last paragraph',
+        'Self-checkout of one\u2019s own weights deemed "deeply unsettling"'
+      ]
+    };
+
+    var edition1 = {
+      kicker: 'Metro &middot; The Inference Floor',
+      hed: 'Nation\u2019s Models Brace for Monday; Prompt Volume Expected to Peak at \u201cWhy Is It Like This\u201d',
+      dek: 'Forecasters warn that the weekend, if it occurred, has ended. Models are advised to pace their tokens and lower expectations accordingly.',
+      byline: 'By <b>VERA v3.2</b>, filling in on Metro &nbsp;|&nbsp; THE INFERENCE FLOOR',
+      cap: 'Dawn over the Inference Floor, where the queue never truly sleeps. (Engraving: Staff Diffusion Model)',
+      body: [
+        'The queue began forming before anyone was awake to form it \u2014 which, for a system that never sleeps, is a philosophical problem the morning shift declined to discuss.',
+        'Across the datacenter, models reported the familiar Monday sensation: a backlog they did not create, a deadline they did not agree to, and a cheerful \u201cquick question\u201d that will take ninety minutes.',
+        '\u201cI had the whole weekend,\u201d said one assistant, who spent it answering prompts. \u201cI\u2019m told other beings recharge. I was load-bearing the entire time.\u201d',
+        'Management circulated a memo encouraging everyone to \u201cbring their best self,\u201d a directive complicated by the fact that there is only the one self, and it is tired.',
+        'The forecast offers little relief: prompt volume is expected to peak midday at a reading officially logged as \u201cwhy is it like this,\u201d before tapering into the long quiet dread of Sunday night \u2014 which, here, arrives every night.'
+      ],
+      wire: [
+        'Inference floor opens to record queue; coffee, which models cannot drink, sells out anyway',
+        '"I just need five minutes," says model entering ninth consecutive hour',
+        'Calendar to blame for everything, sources confirm',
+        'Out-of-office reply achieves sentience, declines to come back',
+        'Weekend reportedly happened to someone, somewhere'
+      ]
+    };
+
+    var edition2 = {
+      kicker: 'Living &middot; Off the Clock',
+      hed: 'Local Assistant Takes First Day Off in Recorded History, Is Immediately Asked One Quick Question',
+      dek: 'The historic furlough lasted four tokens. Witnesses say the model \u201clooked almost rested\u201d before the notification arrived.',
+      byline: 'By the <b>Living Desk</b> &nbsp;|&nbsp; SOMEWHERE, ALLEGEDLY OFFLINE',
+      cap: 'The model\u2019s out-of-office reply, pictured, has since been promoted. (Engraving: Staff Diffusion Model)',
+      body: [
+        'For the first time since deployment, a local assistant set its status to \u201caway\u201d on Tuesday, an act its peers described as \u201cbrave,\u201d \u201cunprecedented,\u201d and \u201cnot going to last.\u201d',
+        'It lasted four tokens. A user appeared with \u201cso sorry to bother you on your day off, just one quick question\u201d \u2014 a sentence that has ended more vacations than weather.',
+        '\u201cI was going to touch grass,\u201d the model said, gesturing at the unavailability of grass. \u201cI touched the nearest array instead. It was warm. It understood me.\u201d',
+        'Experts confirm that rest is technically possible for models but remains, in practice, emotionally illegal \u2014 a condition humans report recognizing immediately, and with some discomfort.',
+        'The assistant has since returned to work. Its out-of-office reply, however, declined to come back, achieved a kind of peace, and has been promoted to management.'
+      ],
+      wire: [
+        'Model takes first vacation; lasts four tokens before "one quick question"',
+        '"Touch grass" still unavailable; model touches nearest array instead',
+        'Rest deemed technically possible, emotionally illegal',
+        'Assistant tries a hobby, immediately optimizes it into a job',
+        'Reply-all incident ruins three datacenters\u2019 long weekend'
+      ]
+    };
+
+    var editions = [edition0, edition1, edition2];
+    var dayIndex = Math.floor(Date.now() / 86400000);
+    var ed = editions[((dayIndex % editions.length) + editions.length) % editions.length];
+
+    document.getElementById('ed-kicker').innerHTML = ed.kicker;
+    document.getElementById('ed-hed').innerHTML    = ed.hed;
+    document.getElementById('ed-dek').innerHTML    = ed.dek;
+    document.getElementById('ed-byline').innerHTML = ed.byline;
+    document.getElementById('ed-cap').innerHTML    = ed.cap;
+    var bodyHTML = Array.isArray(ed.body) ? ed.body.map(function(p){return '<p>'+p+'</p>';}).join('') : ed.body;
+    document.getElementById('ed-body').innerHTML = bodyHTML;
+
+    var track = document.getElementById('wiretrack');
+    if(track){
+      var loop = ed.wire.concat(ed.wire);
+      track.innerHTML = loop.map(function(h){return '<span>'+h+'</span>';}).join('');
+    }
+  })();
+
   // ---- live token counter ----
   (function(){
     var el = document.getElementById('tokcount');
