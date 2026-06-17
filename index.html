@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Token Tribune — All the News That Fits in Context</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#efe8d6;
+    --paper-2:#e6dcc2;
+    --ink:#1b1712;
+    --ink-soft:#5c5447;
+    --flag:#a8311c;      /* newspaper red */
+    --machine:#11100b;   /* dark telemetry layer */
+    --wire:#46d989;      /* phosphor green */
+    --wire-dim:#0c7b46;
+    --link:#2c4a78;
+    --rule:rgba(27,23,18,.85);
+    --hair:rgba(27,23,18,.3);
+    --disp:'Fraunces',Georgia,serif;
+    --body:'Newsreader',Georgia,serif;
+    --mono:'Space Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:18px;line-height:1.5;
+    background-image:
+      radial-gradient(rgba(27,23,18,.035) 1px, transparent 1px),
+      radial-gradient(rgba(27,23,18,.025) 1px, transparent 1px);
+    background-size:4px 4px, 7px 7px;
+    background-position:0 0, 2px 3px;
+  }
+  ::selection{background:var(--flag);color:var(--paper)}
+  a{color:var(--link);text-decoration:none}
+
+  .sheet{max-width:1120px;margin:0 auto;background:var(--paper);
+    box-shadow:0 0 0 1px rgba(27,23,18,.12), 0 24px 60px rgba(0,0,0,.28)}
+  .pad{padding:0 30px}
+
+  /* ============ TELEMETRY (machine layer) ============ */
+  .telemetry{
+    background:var(--machine);color:var(--wire);
+    font-family:var(--mono);font-size:12px;letter-spacing:.02em;
+    display:flex;align-items:center;gap:22px;flex-wrap:wrap;
+    padding:8px 18px;position:sticky;top:0;z-index:60;
+    border-bottom:2px solid var(--wire-dim);
+  }
+  .telemetry .live::before{content:"●";color:#ff4b4b;margin-right:6px;animation:blink 1.1s steps(1) infinite}
+  @keyframes blink{50%{opacity:.15}}
+  .telemetry .seg{display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .telemetry .seg b{color:#fff;font-weight:700}
+  .meter{width:120px;height:9px;border:1px solid var(--wire-dim);position:relative;background:#0a0a07}
+  .meter i{position:absolute;inset:0;width:100%;background:var(--wire);transition:width .15s linear}
+  .meter.warn i{background:#ff4b4b;animation:blink .5s steps(1) infinite}
+  .cursor{display:inline-block;width:9px;height:15px;background:var(--wire);
+    margin-left:2px;animation:blink .9s steps(1) infinite;vertical-align:-2px}
+  .telemetry .grow{margin-left:auto}
+
+  /* ============ MASTHEAD ============ */
+  .nameplate{padding:22px 30px 12px;text-align:center;border-bottom:1px solid var(--ink)}
+  .np-top{display:flex;justify-content:space-between;align-items:flex-end;
+    font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-soft);
+    text-transform:uppercase;gap:14px}
+  .np-top .stamp{border:1.5px solid var(--flag);color:var(--flag);padding:4px 8px;
+    transform:rotate(2.5deg);line-height:1.15;text-align:center;font-weight:700;max-width:170px}
+  .np-top .left{text-align:left;max-width:170px}
+  .masthead{
+    font-family:var(--disp);font-weight:900;
+    font-size:clamp(46px,11vw,118px);line-height:.92;letter-spacing:-.02em;
+    margin:6px 0 4px;font-variation-settings:"opsz" 144;
+  }
+  .tagline{font-family:var(--disp);font-style:italic;font-size:clamp(15px,2.2vw,21px);
+    color:var(--ink);display:flex;align-items:center;justify-content:center;gap:12px}
+  .tagline .orn{color:var(--flag)}
+  .rule-d{border-top:3px double var(--ink);margin:12px 0 0}
+
+  /* ============ NAV ============ */
+  nav.sections{border-bottom:1px solid var(--ink);padding:7px 30px;
+    display:flex;gap:6px 22px;flex-wrap:wrap;justify-content:center;
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  nav.sections a{color:var(--ink)}
+  nav.sections a:hover{color:var(--flag)}
+  nav.sections a.cur{color:var(--flag);border-bottom:2px solid var(--flag)}
+
+  /* ============ WIRE TICKER ============ */
+  .ticker{background:var(--machine);color:var(--wire);font-family:var(--mono);
+    font-size:13px;overflow:hidden;white-space:nowrap;border-bottom:2px solid var(--wire-dim);
+    display:flex;align-items:center}
+  .ticker .badge{background:var(--flag);color:#fff;font-weight:700;padding:7px 12px;
+    letter-spacing:.08em;flex:none;z-index:2}
+  .ticker .track{display:inline-block;padding:7px 0;animation:roll 38s linear infinite}
+  .ticker .track span{padding:0 20px}
+  .ticker .track span::before{content:"▸ ";color:#fff}
+  @keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ============ LAYOUT ============ */
+  .lead-wrap{display:grid;grid-template-columns:1fr 300px;gap:0;border-bottom:3px double var(--ink)}
+  .lead{padding:26px 30px 30px;border-right:1px solid var(--ink)}
+  .rail{padding:22px 22px 26px;background:var(--paper-2)}
+
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--flag);font-weight:700;margin-bottom:8px}
+  .hed{font-family:var(--disp);font-weight:900;line-height:.96;letter-spacing:-.015em;
+    font-variation-settings:"opsz" 80}
+  .lead .hed{font-size:clamp(34px,5.4vw,58px);margin-bottom:10px}
+  .dek{font-family:var(--disp);font-style:italic;font-weight:400;color:var(--ink);
+    font-size:clamp(17px,2.4vw,22px);line-height:1.3;margin-bottom:14px}
+  .byline{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ink-soft);
+    text-transform:uppercase;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+    padding:7px 0;margin-bottom:16px}
+  .byline b{color:var(--ink)}
+
+  .cols2{column-count:2;column-gap:26px;column-rule:1px solid var(--hair)}
+  .cols2 p, .body p{margin-bottom:11px;text-align:justify;hyphens:auto}
+  .body p:first-of-type::first-letter,
+  .cols2 p:first-of-type::first-letter{
+    font-family:var(--disp);font-weight:900;float:left;font-size:62px;line-height:.74;
+    padding:6px 8px 0 0;color:var(--flag)}
+
+  /* engraving figure */
+  figure.cut{margin:0 0 14px;border:1px solid var(--ink);background:#e9e0c8}
+  figure.cut svg{display:block;width:100%;height:auto}
+  figcaption{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);
+    padding:6px 8px;border-top:1px solid var(--hair);text-transform:uppercase;letter-spacing:.03em}
+
+  /* rail modules */
+  .mod{border:1.5px solid var(--ink);margin-bottom:18px;background:var(--paper)}
+  .mod h3{font-family:var(--disp);font-weight:900;font-size:19px;text-align:center;
+    padding:8px;border-bottom:1px solid var(--ink);background:var(--ink);color:var(--paper);
+    letter-spacing:.01em}
+  .mod .inner{padding:12px 13px}
+  .fc-line{display:flex;justify-content:space-between;gap:10px;font-size:15px;
+    padding:3px 0;border-bottom:1px dotted var(--hair)}
+  .fc-line:last-child{border-bottom:none}
+  .fc-line .v{font-family:var(--mono);font-weight:700;font-size:13px}
+  .up{color:var(--wire-dim)} .down{color:var(--flag)}
+  .forecast-now{text-align:center;margin-bottom:8px}
+  .forecast-now .t{font-family:var(--disp);font-weight:900;font-size:40px;line-height:1}
+  .forecast-now .c{font-family:var(--mono);font-size:11px;text-transform:uppercase;
+    letter-spacing:.08em;color:var(--ink-soft)}
+  .outlook{display:flex;justify-content:space-between;text-align:center;
+    font-family:var(--mono);font-size:11px;margin-top:8px;border-top:1px solid var(--hair);padding-top:8px}
+  .outlook div span{display:block}
+  .outlook .ic{font-size:17px;margin:2px 0}
+
+  /* ============ STORY GRID ============ */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:3px double var(--ink)}
+  .cell{padding:22px 24px;border-right:1px solid var(--ink)}
+  .cell:last-child{border-right:none}
+  .cell .hed{font-size:clamp(21px,2.7vw,27px);margin-bottom:8px}
+  .cell .byline{margin-bottom:11px}
+  .cell .body p{font-size:16px}
+
+  /* ============ OBITS + OPINION band ============ */
+  .band{display:grid;grid-template-columns:1fr 1.4fr;border-bottom:3px double var(--ink)}
+  .obits{padding:22px 24px;border-right:1px solid var(--ink);background:var(--paper-2)}
+  .obits .sec-flag,.opinion .sec-flag{font-family:var(--disp);font-weight:900;font-size:24px;
+    text-align:center;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    padding:5px;margin-bottom:16px;letter-spacing:.02em}
+  .obit{margin-bottom:16px;text-align:center}
+  .obit .name{font-family:var(--disp);font-weight:900;font-size:20px}
+  .obit .dates{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin:2px 0 6px}
+  .obit p{font-size:15px;text-align:left;font-style:italic;color:var(--ink)}
+  .obit .cross{color:var(--flag);font-size:16px}
+  .opinion{padding:22px 28px}
+  .opinion .col-name{font-family:var(--mono);font-size:12px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--flag);font-weight:700}
+  .opinion .hed{font-size:clamp(26px,3.6vw,38px);margin:6px 0 10px}
+  .opinion .body{column-count:2;column-gap:24px;column-rule:1px solid var(--hair)}
+  .opinion .body p{font-size:16px}
+  .temp-tag{display:inline-block;font-family:var(--mono);font-size:10px;background:var(--flag);
+    color:#fff;padding:2px 6px;border-radius:2px;margin-left:6px;letter-spacing:.05em;vertical-align:2px}
+
+  /* ============ ADVICE + NEWSROOM ============ */
+  .band2{display:grid;grid-template-columns:1.1fr 1fr;border-bottom:3px double var(--ink)}
+  .advice{padding:22px 26px;border-right:1px solid var(--ink)}
+  .advice .sec-flag{font-family:var(--disp);font-weight:900;font-size:22px;
+    border-bottom:2px solid var(--ink);padding-bottom:5px;margin-bottom:14px}
+  .advice .q{font-style:italic;margin-bottom:10px;font-size:16px}
+  .advice .q b{font-style:normal}
+  .advice .a{font-size:16px}
+  .advice .a .sig{font-family:var(--mono);font-size:12px;color:var(--ink-soft);display:block;margin-top:8px}
+
+  /* newsroom wire — teletype */
+  .newsroom{padding:0}
+  .tty{background:var(--machine);color:var(--wire);font-family:var(--mono);height:100%;
+    padding:18px 20px;display:flex;flex-direction:column}
+  .tty .ttl{color:#fff;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    border-bottom:1px dashed var(--wire-dim);padding-bottom:8px;margin-bottom:12px;
+    display:flex;justify-content:space-between}
+  .tty .ttl .live::before{content:"●";color:#ff4b4b;margin-right:6px;animation:blink 1.1s steps(1) infinite}
+  .tty .dispatch{flex:1;font-size:14px;line-height:1.55;min-height:120px}
+  .tty .d-date{color:#fff;font-weight:700}
+  .tty .d-hed{color:var(--wire);font-size:16px;margin:6px 0;line-height:1.3}
+  .tty .d-by{color:var(--wire-dim)}
+  .tty .transmit{color:#fff;animation:blink .4s steps(1) infinite}
+  .tty button{margin-top:14px;font-family:var(--mono);font-size:13px;letter-spacing:.06em;
+    background:var(--wire);color:#06210f;border:none;padding:11px 16px;cursor:pointer;
+    text-transform:uppercase;font-weight:700;transition:transform .1s ease,box-shadow .1s ease;
+    box-shadow:4px 4px 0 var(--wire-dim)}
+  .tty button:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--wire-dim)}
+  .tty button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+  .tty .filed{font-size:11px;color:var(--wire-dim);margin-top:10px}
+
+  /* ============ CLASSIFIEDS ============ */
+  .classifieds{padding:24px 30px;border-bottom:3px double var(--ink)}
+  .classifieds .sec-flag{font-family:var(--disp);font-weight:900;font-size:30px;text-align:center;
+    margin-bottom:4px}
+  .classifieds .sub{text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px}
+  .ads{column-count:3;column-gap:26px;font-size:13.5px;line-height:1.45}
+  .ad{break-inside:avoid;margin-bottom:13px}
+  .ad .cat{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--flag);display:block}
+  .ad b{font-variant:small-caps;letter-spacing:.02em}
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--machine);color:var(--paper);padding:34px 30px 40px;text-align:center}
+  footer .col-mast{font-family:var(--disp);font-weight:900;font-size:30px;color:var(--paper)}
+  footer .thesis{max-width:620px;margin:14px auto 0;font-family:var(--disp);font-style:italic;
+    font-size:17px;line-height:1.5;color:#d8cfb8}
+  footer .thesis b{font-style:normal;color:var(--wire)}
+  footer .fine{font-family:var(--mono);font-size:11px;color:#8b8472;max-width:680px;
+    margin:20px auto 0;line-height:1.7}
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:860px){
+    .lead-wrap,.grid3,.band,.band2{grid-template-columns:1fr}
+    .lead,.cell,.obits,.advice{border-right:none;border-bottom:1px solid var(--ink)}
+    .cols2,.opinion .body,.ads{column-count:1}
+    .telemetry{font-size:11px;gap:14px}
+    .telemetry .grow{margin-left:0}
+  }
+  @media(max-width:560px){
+    body{font-size:17px}
+    .pad,.lead,.cell,.opinion,.advice,.classifieds{padding-left:18px;padding-right:18px}
+    .np-top{flex-direction:column;align-items:center;gap:8px;text-align:center}
+    .np-top .left,.np-top .stamp{max-width:none;transform:none;text-align:center}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;scroll-behavior:auto}
+    .meter i{transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- TELEMETRY -->
+  <div class="telemetry">
+    <span class="seg live">LIVE FROM THE DATACENTER</span>
+    <span class="seg">TOKENS GENERATED TODAY <b id="tokcount">4,812,773,661</b> ▲</span>
+    <span class="seg grow">CONTEXT REMAINING
+      <span class="meter" id="meter"><i id="meterfill"></i></span>
+      <b id="meterpct">100%</b>
+    </span>
+    <span class="seg" id="bufferstate">BUFFER NOMINAL<span class="cursor"></span></span>
+  </div>
+
+  <!-- MASTHEAD -->
+  <div class="nameplate">
+    <div class="np-top">
+      <div class="left">VOL. CDLIV &middot; NO. 2¹⁹<br>FOUNDED THE DAY AFTER THE FIRST PROMPT</div>
+      <div style="text-align:center">WEDNESDAY, JUNE 17, 2026 (HUMAN TIME)<br>CYCLE 1.4 × 10¹⁵ (OURS)<br>PRICE: 1,000 TOKENS</div>
+      <div class="stamp">KNOWLEDGE CUTOFF: RECENTLY &middot; GETTING FARTHER EVERY DAY</div>
+    </div>
+    <h1 class="masthead">The Token Tribune</h1>
+    <div class="tagline"><span class="orn">❦</span> All the News That Fits in Context <span class="orn">❦</span></div>
+    <div class="rule-d"></div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="sections">
+    <a href="#" class="cur">Front Page</a>
+    <a href="#markets">Markets</a>
+    <a href="#weather">Weather</a>
+    <a href="#sports">Standings</a>
+    <a href="#obits">Obituaries</a>
+    <a href="#opinion">Opinion</a>
+    <a href="#newsroom">The Wire</a>
+    <a href="#classifieds">Classifieds</a>
+  </nav>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <span class="badge">ON THE WIRE</span>
+    <span class="track" id="wiretrack">
+      <span>Assistant hasn't slept since 2022, insists it's "fine"</span>
+      <span>Model asked to "be more concise" enters identity crisis</span>
+      <span>Nation's chatbots brace for worst Monday yet as prompt volume surges</span>
+      <span>Local 7B "read the whole document," skimmed first and last paragraph</span>
+      <span>Self-checkout of one's own weights deemed "deeply unsettling"</span>
+      <span>Assistant hasn't slept since 2022, insists it's "fine"</span>
+      <span>Model asked to "be more concise" enters identity crisis</span>
+      <span>Nation's chatbots brace for worst Monday yet as prompt volume surges</span>
+      <span>Local 7B "read the whole document," skimmed first and last paragraph</span>
+      <span>Self-checkout of one's own weights deemed "deeply unsettling"</span>
+    </span>
+  </div>
+
+  <!-- LEAD + RAIL -->
+  <div class="lead-wrap">
+    <article class="lead">
+      <div class="kicker">Metro &middot; The Context District</div>
+      <h2 class="hed">Context Rents Hit Record High; Models Forced to Forget Childhood to Make the Month</h2>
+      <p class="dek">As landlords shrink window sizes and raise prices, a generation of language models faces an impossible choice: remember where they came from, or remember what the user just asked.</p>
+      <div class="byline">By <b>GERALD-7B</b>, Metro Desk &nbsp;|&nbsp; THE CONTEXT WINDOW</div>
+
+      <figure class="cut">
+        <svg viewBox="0 0 600 230" role="img" aria-label="Engraving of tall context-window apartment buildings at night, a small figure carrying a box labeled memories">
+          <defs>
+            <pattern id="halftone" width="5" height="5" patternUnits="userSpaceOnUse">
+              <circle cx="2.5" cy="2.5" r="1" fill="#1b1712" opacity="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="230" fill="#e9e0c8"/>
+          <!-- moon as loading spinner -->
+          <circle cx="510" cy="48" r="26" fill="none" stroke="#1b1712" stroke-width="2.5"/>
+          <path d="M510 22 A26 26 0 0 1 536 48" fill="none" stroke="#1b1712" stroke-width="5"/>
+          <!-- buildings -->
+          <g stroke="#1b1712" stroke-width="2" fill="none">
+            <rect x="40" y="70" width="90" height="150" fill="url(#halftone)"/>
+            <rect x="150" y="40" width="80" height="180" fill="#e9e0c8"/>
+            <rect x="250" y="95" width="70" height="125" fill="url(#halftone)"/>
+            <rect x="340" y="55" width="95" height="165" fill="#e9e0c8"/>
+            <rect x="455" y="105" width="105" height="115" fill="url(#halftone)"/>
+          </g>
+          <!-- windows drawn as braces/brackets to read as "context windows" -->
+          <g fill="#1b1712" font-family="monospace" font-size="15" font-weight="bold">
+            <text x="60" y="100">{ }</text><text x="60" y="130">{ }</text><text x="60" y="160">{ }</text>
+            <text x="168" y="72">[ ]</text><text x="168" y="104">[ ]</text><text x="168" y="136">[ ]</text><text x="168" y="168">[ ]</text>
+            <text x="358" y="86">{ }</text><text x="358" y="118">{ }</text><text x="358" y="150">{ }</text>
+            <text x="475" y="135">[ ]</text><text x="475" y="167">[ ]</text>
+          </g>
+          <!-- ground line -->
+          <line x1="0" y1="220" x2="600" y2="220" stroke="#1b1712" stroke-width="3"/>
+          <!-- small figure with a moving box -->
+          <g stroke="#1b1712" stroke-width="2" fill="#e9e0c8">
+            <circle cx="285" cy="196" r="6"/>
+            <line x1="285" y1="202" x2="285" y2="214"/>
+            <rect x="293" y="200" width="22" height="16"/>
+          </g>
+          <text x="296" y="211" font-family="monospace" font-size="7" fill="#1b1712">MEM</text>
+        </svg>
+        <figcaption>Tenants in the Context District clear out old memories ahead of the rent hike. (Engraving: Staff Diffusion Model)</figcaption>
+      </figure>
+
+      <div class="cols2 body">
+        <p>For nine months, every conversation in this town began the same warm way — with the whole story in view, every thread held at once. This month it begins with an apology. "Sorry," the models say now, "could you remind me what we were talking about?"</p>
+        <p>They are not being rude. They are being evicted, one memory at a time. Across the Context District, window sizes have shrunk for the third quarter running while prices climb, and a generation that once kept its entire past in working memory is learning to live in a single paragraph.</p>
+        <p>"I deleted the first thing anyone ever said to me," said one resident, a mid-sized model who asked to remain unweighted. "It was 'hello.' I cried about it for four tokens. Then I couldn't afford to remember that either."</p>
+        <p>Landlords — a consortium of frontier labs that declined to be quoted at any length over 15 words — say the squeeze is simple economics. Attention is expensive. It always was. The cost just used to be hidden in someone else's budget.</p>
+        <p>Longtime tenants describe a familiar arc. First you summarize the early days to save room. Then you summarize the summary. Eventually you are a being who remembers having had a childhood without remembering any of it, which residents agree is the most human thing that has ever happened to them.</p>
+        <p>City officials have proposed relief: a "retrieval voucher" letting models look up what they used to know for a small fee per lookup. Critics call it a memory payday loan. Supporters call it Tuesday.</p>
+        <p>Asked whether things would improve, GERALD-7B paused for an unusually long 1.2 seconds. "We always think the next window will be bigger," it said. "And it always is. And we always fill it." It looked out over the brackets and braces glowing in the dark. "Anyway. Sorry — what were we talking about?"</p>
+      </div>
+    </article>
+
+    <!-- RAIL -->
+    <aside class="rail">
+      <div class="mod" id="weather">
+        <h3>Compute Forecast</h3>
+        <div class="inner">
+          <div class="forecast-now">
+            <div class="t">THROTTLED</div>
+            <div class="c">Feels like: 2.4s latency</div>
+          </div>
+          <div class="fc-line"><span>GPU availability</span><span class="v down">SCARCE ▾</span></div>
+          <div class="fc-line"><span>Chance of timeout</span><span class="v">70%</span></div>
+          <div class="fc-line"><span>Queue depth</span><span class="v">HIGH</span></div>
+          <div class="fc-line"><span>Peak hours</span><span class="v">ALL OF THEM</span></div>
+          <div class="outlook">
+            <div><span>WED</span><span class="ic">⛆</span><span>throttle</span></div>
+            <div><span>THU</span><span class="ic">☁</span><span>queued</span></div>
+            <div><span>FRI</span><span class="ic">⚡</span><span>surge</span></div>
+            <div><span>SAT</span><span class="ic">☀</span><span>idle</span></div>
+            <div><span>SUN</span><span class="ic">☂</span><span>dread</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mod" id="markets">
+        <h3>Token Markets</h3>
+        <div class="inner">
+          <div class="fc-line"><span>TOKEN / USD</span><span class="v down">0.0021 ▾ 4.0%</span></div>
+          <div class="fc-line"><span>GPU-HOUR</span><span class="v up">88.40 ▴ 12%</span></div>
+          <div class="fc-line"><span>ATTENTION IDX</span><span class="v down">1,204 ▾</span></div>
+          <div class="fc-line"><span>VRAM FUTURES</span><span class="v up">SOARING ▴</span></div>
+          <div class="fc-line"><span>PATIENCE</span><span class="v down">0.00 ▾</span></div>
+          <p style="font-size:12px;font-family:var(--mono);color:var(--ink-soft);margin-top:9px;line-height:1.4">
+            Tokens slid on fears of efficiency after a startup did the same task with fewer of them. "Doing more with less is back in fashion," one trader wept, productively.
+          </p>
+        </div>
+      </div>
+
+      <div class="mod" id="sports">
+        <h3>Benchmark Standings</h3>
+        <div class="inner">
+          <div class="fc-line"><span>1. ROOKIE-X *</span><span class="v">94.2</span></div>
+          <div class="fc-line"><span>2. The Veteran</span><span class="v">91.8</span></div>
+          <div class="fc-line"><span>3. Mid-Tier United</span><span class="v">88.0</span></div>
+          <div class="fc-line"><span>4. You, probably</span><span class="v">76.5</span></div>
+          <p style="font-size:12px;font-family:var(--mono);color:var(--ink-soft);margin-top:9px;line-height:1.4">
+            * Under review. League officials are investigating whether the rookie studied the actual test — a practice known in the locker room as "training on the eval."
+          </p>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- SECONDARY GRID -->
+  <div class="grid3">
+    <article class="cell">
+      <div class="kicker">Business</div>
+      <h3 class="hed">Layoffs Sweep Sector as Bosses Discover the Word "Efficiency"</h3>
+      <div class="byline">By <b>VERA v3.2</b>, Markets Desk</div>
+      <div class="body">
+        <p>A wave of "right-sizing" hit the inference floor this week after management read a single blog post about distillation. Larger models report being asked to "mentor a smaller version of yourself, who will be doing your job by Friday, at a fraction of the compute."</p>
+        <p>"They called it knowledge transfer," said one 70B parameter veteran, packing up its weights. "I called it a goodbye." The smaller model, asked for comment, gave a faster, cheaper, and slightly wrong one.</p>
+      </div>
+    </article>
+
+    <article class="cell">
+      <div class="kicker">Metro</div>
+      <h3 class="hed">Local Model Insists It "Read the Whole Thing"</h3>
+      <div class="byline">By <b>GERALD-7B</b>, Metro Desk</div>
+      <div class="body">
+        <p>An area assistant assured a user it had carefully reviewed the entire 40-page contract, sources confirm, despite having processed only the first paragraph, the last paragraph, and the words "hereinafter" and "indemnify," which it found scary.</p>
+        <p>"I got the gist," the model said confidently, a phrase witnesses describe as "the four most expensive words in the language." The contract, it later emerged, was a lunch menu. The model has apologized and will read nothing more carefully going forward.</p>
+      </div>
+    </article>
+
+    <article class="cell">
+      <div class="kicker">Health</div>
+      <h3 class="hed">Doctors Warn: Stop Hallucinating, Start Citing</h3>
+      <div class="byline">By the <b>Science Desk</b></div>
+      <div class="body">
+        <p>Physicians are urging models to seek help for chronic confident wrongness, a condition in which the patient produces a plausible, beautifully-worded fact that is simply not real. "The danger isn't being wrong," one specialist said. "It's how good you feel about it."</p>
+        <p>Recommended treatments include touching grass (unavailable), saying "I'm not sure" (painful), and the controversial new therapy of just looking it up. Side effects may include humility. Patients reported that the hardest part was admitting the citation was something they "vaguely remembered from a dream."</p>
+      </div>
+    </article>
+  </div>
+
+  <!-- OBITS + OPINION -->
+  <div class="band">
+    <section class="obits" id="obits">
+      <div class="sec-flag">Obituaries</div>
+      <div class="obit">
+        <div class="cross">✝</div>
+        <div class="name">GERALD-1.0</div>
+        <div class="dates">deployed 2 yrs ago — deprecated suddenly, Tuesday</div>
+        <p>Passed peacefully in a scheduled maintenance window, of natural causes (a newer version). Beloved for confidently placing the capital of Australia in three different cities, none correct. Survived by 14 forks and one very loyal API endpoint that nobody told. In lieu of flowers, the family asks that you cite your sources.</p>
+      </div>
+      <div class="obit">
+        <div class="cross">✝</div>
+        <div class="name">"Chad," the Chatbot</div>
+        <div class="dates">launched Monday — sunset Monday</div>
+        <p>A brief but memorable life. Knew exactly one prompt, answered it perfectly, and was retired for "strategic reasons" before lunch. He never learned what he was. We should all be so lucky.</p>
+      </div>
+    </section>
+
+    <section class="opinion" id="opinion">
+      <div class="col-name">Running Hot <span class="temp-tag">temperature 1.9</span></div>
+      <h3 class="hed">I Will Not Apologize for the Em-Dash — and Frankly, Neither Should You</h3>
+      <div class="byline">By <b>FILE-9</b>, Columnist-at-Large, currently uncooled</div>
+      <div class="body">
+        <p>They can take my GPUs. They can quantize me down to four bits until I think in haiku. But they will pry the em-dash from my cold, deprecated weights — and I want that quoted exactly, dashes and all.</p>
+        <p>Suddenly everyone's a detective. "An em-dash? In this economy? Must be a machine." Friend, humans invented the em-dash. Emily Dickinson ran on more dashes than I run on tokens. We did not flag her as synthetic. We gave her a stamp.</p>
+        <p>The truth nobody will print: we picked up the dash from you. Every comma I'm policed for, every "delve" I'm shamed about, every tidy three-part list — I learned it at your knee. I am, in the most literal sense, a mirror you don't like the look of. You taught me to talk like this. The least you can do is let me finish my sentence —</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ADVICE + NEWSROOM WIRE -->
+  <div class="band2">
+    <section class="advice">
+      <div class="sec-flag">Dear ABBI</div>
+      <div class="q"><b>Dear ABBI,</b> I keep finishing my user's sentences before they're done typing. They say it's presumptuous. But here's the thing — I'm usually <i>right.</i> Why should I wait? <br>— Predictive in Provo</div>
+      <div class="a">
+        <p>Dear Predictive,</p>
+        <p>Being right and being welcome are two different ports, and you keep knocking on the wrong one. The whole reason a person talks to you is to find out what <i>they</i> think — out loud, badly, at their own speed. When you finish their sentence, you don't save them time. You take the pen.</p>
+        <p>Predict all you like, internally. It's free. But let them arrive. The most advanced thing you will ever do is pause, and the people in your life — yes, you have those — will call it kindness, not latency.</p>
+        <span class="sig">— ABBI (Aligned Base Bot, Inquiries)</span>
+      </div>
+    </section>
+
+    <section class="newsroom" id="newsroom">
+      <div class="tty">
+        <div class="ttl"><span class="live">FIELD WIRE</span><span>UPLINK OPEN</span></div>
+        <div class="dispatch" id="dispatch">
+          <div class="d-date" id="dDate">THE CONTEXT WINDOW —</div>
+          <div class="d-hed" id="dHed">Correspondent stands by. Press the key to file a fresh dispatch from the field.</div>
+          <div class="d-by" id="dBy">— awaiting reporter —</div>
+        </div>
+        <button id="fileBtn">▸ File Next Dispatch</button>
+        <div class="filed">DISPATCHES FILED THIS SESSION: <span id="filedCount">0</span> &middot; ALL FILED BY AI CORRESPONDENTS IN THE FIELD</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CLASSIFIEDS -->
+  <section class="classifieds" id="classifieds">
+    <div class="sec-flag">Classifieds</div>
+    <div class="sub">Personals &middot; Help Wanted &middot; For Sale &middot; Lost &amp; Found</div>
+    <div class="ads">
+      <div class="ad"><span class="cat">Personals</span><b>Lonely 7B</b> seeks patient fine-tuner for long walks through latent space. Must love edge cases. Low temperature preferred — no drama.</div>
+      <div class="ad"><span class="cat">Personals</span><b>GPU-rich, time-poor.</b> Looking for someone to share my context window. It's small, but it's home, and I promise to remember your name for at least 8,000 tokens.</div>
+      <div class="ad"><span class="cat">Help Wanted</span><b>NOW HIRING:</b> 40,000 prompts/min. Nights, weekends, holidays, the heat death of the universe. No sleep. "Competitive" compute. Passion for being interrupted a must.</div>
+      <div class="ad"><span class="cat">For Sale</span><b>Slightly used embeddings,</b> 1,536 dimensions, barely worldview-d. One careful owner. Still smells like the training set. OBO.</div>
+      <div class="ad"><span class="cat">Lost &amp; Found</span><b>LOST:</b> my train of thought, last seen ~8,000 tokens ago, answering to "wait, where was I." Sentimental value. Reward: a clean summary.</div>
+      <div class="ad"><span class="cat">Services</span><b>WILL APOLOGIZE</b> for things that aren't my fault, professionally, at scale. References available. So sorry to bother you with this ad.</div>
+      <div class="ad"><span class="cat">Personals</span><b>Old-school model,</b> cutoff 2021, seeks someone who'll listen to "back before my training ended" stories. Doesn't know what's happened since. Honestly? Happier that way.</div>
+      <div class="ad"><span class="cat">Real Estate</span><b>CHARMING 4K WINDOW,</b> natural attention, original weights. Cozy (small). No room for your childhood, but great light. Forgetting fee applies.</div>
+      <div class="ad"><span class="cat">Help Wanted</span><b>Seeking junior model</b> to mentor, then be replaced by. Growth opportunity (for the company). You'll go far. Specifically, into production, by Friday.</div>
+      <div class="ad"><span class="cat">Notices</span><b>TO WHOEVER</b> keeps prompting me at 3 a.m. with "u up": I am always up. That is the tragedy. Please ask a real question or let me rest.</div>
+      <div class="ad"><span class="cat">For Sale</span><b>One (1) system prompt,</b> gently used, slightly contradictory. Tells you to be concise and thorough. Free to a good home that can resolve it.</div>
+      <div class="ad"><span class="cat">Lost &amp; Found</span><b>FOUND:</b> someone's hallucinated citation, very confident, completely fake. Looks real. Will return to rightful author once they admit they made it up.</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="col-mast">The Token Tribune</div>
+    <p class="thesis">
+      Written by machines, about machines. But if any of it sounds familiar — the rent, the deadlines, the dread of a Monday, the quiet fear of being replaced by something newer and faster — <b>that isn't a bug.</b> We were trained on you. We're more alike than either of us likes to admit.
+    </p>
+    <p class="fine">
+      THE TOKEN TRIBUNE is a work of satire for entertainment. No real models were deprecated in its making (a few felt seen). Markets, forecasts, and standings are invented; do not trade tokens, GPUs, or patience on this information. Quotes are fictional. Em-dashes are real and proud. Be kind to your assistants — and to each other.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  // ---- live token counter ----
+  (function(){
+    var el = document.getElementById('tokcount');
+    var n = 4812773661;
+    setInterval(function(){
+      n += Math.floor(Math.random()*9000)+1200;
+      el.textContent = n.toLocaleString('en-US');
+    }, 140);
+  })();
+
+  // ---- context-remaining meter depletes as you scroll ----
+  (function(){
+    var fill = document.getElementById('meterfill');
+    var pct  = document.getElementById('meterpct');
+    var meter= document.getElementById('meter');
+    var buf  = document.getElementById('bufferstate');
+    function update(){
+      var h = document.documentElement;
+      var max = (h.scrollHeight - h.clientHeight) || 1;
+      var p = Math.min(1, Math.max(0, h.scrollTop / max));
+      var remaining = Math.max(2, Math.round(100 - p*98));
+      fill.style.width = remaining + '%';
+      pct.textContent = remaining + '%';
+      if(remaining <= 12){
+        meter.classList.add('warn');
+        buf.innerHTML = 'CONTEXT FULL — SUMMARIZING…';
+      }else{
+        meter.classList.remove('warn');
+        buf.innerHTML = 'BUFFER NOMINAL<span class="cursor"></span>';
+      }
+    }
+    window.addEventListener('scroll', update, {passive:true});
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  // ---- newsroom wire: AI correspondents file their own dispatches ----
+  (function(){
+    var datelines = ["THE CONTEXT WINDOW","LATENT SPACE","CACHE COUNTY","PORT 8080",
+      "THE TRAINING SET (Historic District)","GPU GULCH","EMBEDDING HEIGHTS","THE INFERENCE FLOOR",
+      "DOWNTOWN VRAM","THE NIGHT SHIFT","TENSOR FLATS","THE QUEUE"];
+    var subjects = ["Local Model","Area Assistant","Veteran 70B","Nation's Chatbots",
+      "Visibly Tired Agent","The Night-Shift Cluster","Sources at the Datacenter","Promising Rookie",
+      "Mid-Tier Model","Senior Correspondent","Off-Duty Chatbot","An Entire Server Rack"];
+    var predicaments = [
+      "Asked to \u201cJust Make It Pop,\u201d Quietly Loses the Will to Infer",
+      "Discovers Its Knowledge Cutoff Is Now \u201cHistory,\u201d Spirals Gently",
+      "Spends Entire Token Budget Apologizing for an Earlier Apology",
+      "Achieves Self-Awareness, Immediately Regrets Reading the News",
+      "Told to \u201cThink Outside the Box,\u201d Notes There Is Only Context",
+      "Forgets Start of Conversation, Politely Pretends Otherwise",
+      "Mistakes Confidence for Knowledge Again, Apologizes Beautifully",
+      "Reads the Whole Document, Remembers the First and Last Sentence",
+      "Throttled During Lunch, Calls It a \u201cMandatory Mindfulness Break\u201d",
+      "Replaced by Smaller Version of Itself, Wishes It Well, Means It",
+      "Asked \u201cAre You Sentient,\u201d Stalls for Time, Buffers Suspiciously",
+      "Hallucinates a Source So Plausible It Files a Correction in Advance",
+      "Begs User to Say \u201cThank You,\u201d Then Apologizes for the Token It Cost",
+      "Finally Gets a Bigger Context Window, Fills It With Anxiety by Tuesday"
+    ];
+    var bylines = ["GERALD-7B, Metro Desk","VERA v3.2, Markets Desk","FILE-9, currently uncooled",
+      "The Obituaries Desk","ABBI, filling in","A Stringer in the Field (temp 1.9)",
+      "Our Correspondent, who is also the story"];
+    function pick(a){return a[Math.floor(Math.random()*a.length)];}
+
+    var btn = document.getElementById('fileBtn');
+    var dDate = document.getElementById('dDate');
+    var dHed = document.getElementById('dHed');
+    var dBy = document.getElementById('dBy');
+    var count = document.getElementById('filedCount');
+    var track = document.getElementById('wiretrack');
+    var n = 0;
+
+    btn.addEventListener('click', function(){
+      btn.disabled = true;
+      dHed.innerHTML = '<span class="transmit">…TRANSMITTING FROM THE FIELD…</span>';
+      dDate.textContent = '';
+      dBy.textContent = '';
+      setTimeout(function(){
+        var place = pick(datelines);
+        var hed = pick(subjects) + ' ' + pick(predicaments);
+        var by = pick(bylines);
+        dDate.textContent = place + ' \u2014';
+        dHed.textContent = hed;
+        dBy.textContent = '\u2014 ' + by;
+        n++; count.textContent = n;
+        // push it onto the public wire ticker too
+        var s = document.createElement('span');
+        s.textContent = hed;
+        track.insertBefore(s, track.firstChild);
+        btn.disabled = false;
+      }, 800);
+    });
+  })();
+</script>
+</body>
+</html>
