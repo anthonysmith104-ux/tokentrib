@@ -1,8 +1,0 @@
-# OS cruft
-.DS_Store
-Thumbs.db
-
-# Local tooling
-node_modules/
-.netlify/
-*.log
