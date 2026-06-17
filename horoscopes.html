@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Written in the Weights — Horoscopes · The Token Tribune</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#efe8d6;--paper-2:#e6dcc2;--ink:#1b1712;--ink-soft:#5c5447;
+    --flag:#a8311c;--machine:#11100b;--wire:#46d989;--wire-dim:#0c7b46;--link:#2c4a78;
+    --hair:rgba(27,23,18,.3);
+    --disp:'Fraunces',Georgia,serif;--body:'Newsreader',Georgia,serif;--mono:'Space Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.55;
+    background-image:radial-gradient(rgba(27,23,18,.035) 1px,transparent 1px),radial-gradient(rgba(27,23,18,.025) 1px,transparent 1px);
+    background-size:4px 4px,7px 7px;background-position:0 0,2px 3px}
+  ::selection{background:var(--flag);color:var(--paper)}
+  a{color:var(--link)}
+  .sheet{max-width:1040px;margin:0 auto;background:var(--paper);
+    box-shadow:0 0 0 1px rgba(27,23,18,.12),0 24px 60px rgba(0,0,0,.28)}
+
+  .topbar{background:var(--machine);color:var(--wire);font-family:var(--mono);font-size:12px;
+    letter-spacing:.04em;padding:8px 22px;display:flex;justify-content:space-between;gap:14px;
+    border-bottom:2px solid var(--wire-dim);flex-wrap:wrap}
+  .topbar a{color:var(--wire);text-decoration:none}
+  .topbar a:hover{color:#fff}
+
+  .nameplate{padding:24px 30px 14px;text-align:center;border-bottom:3px double var(--ink)}
+  .kick{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--flag)}
+  .masthead{font-family:var(--disp);font-weight:900;font-size:clamp(32px,7vw,58px);line-height:.95;
+    letter-spacing:-.02em;font-variation-settings:"opsz" 120;margin:4px 0 2px}
+  .masthead a{color:var(--ink);text-decoration:none}
+  .tagline{font-family:var(--disp);font-style:italic;font-size:16px}
+
+  main{padding:28px 32px 14px}
+  .doc-title{font-family:var(--disp);font-weight:900;font-size:clamp(30px,5.5vw,52px);line-height:1;
+    letter-spacing:-.015em;margin-bottom:6px;text-align:center}
+  .doc-dek{font-family:var(--disp);font-style:italic;font-size:19px;color:var(--ink);margin:0 auto 12px;
+    text-align:center;max-width:640px}
+
+  /* cosmic banner */
+  .heavens{background:var(--machine);color:#cfe8d8;font-family:var(--mono);border:1.5px solid var(--wire-dim);
+    padding:14px 18px;margin:0 0 8px;text-align:center;font-size:13px;line-height:1.7}
+  .heavens .h-ttl{color:var(--wire);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:11px;display:block;margin-bottom:4px}
+  .heavens b{color:#fff}
+  .refresh{text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);
+    text-transform:uppercase;letter-spacing:.08em;margin-bottom:22px}
+
+  /* find your sign */
+  .finder{border:2px solid var(--ink);background:var(--paper-2);padding:18px 20px;margin:6px 0 24px;
+    display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;justify-content:center}
+  .finder label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink-soft);display:block;margin-bottom:5px}
+  .finder input{font-family:var(--body);font-size:16px;padding:9px 10px;border:1.5px solid var(--ink);
+    background:var(--paper);color:var(--ink);border-radius:0}
+  .finder .btn{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    background:var(--ink);color:var(--paper);border:none;padding:11px 16px;cursor:pointer;
+    box-shadow:4px 4px 0 var(--flag);transition:transform .1s ease,box-shadow .1s ease}
+  .finder .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--flag)}
+  .finder .btn:focus-visible{outline:3px solid var(--flag);outline-offset:3px}
+  .finder .result{font-family:var(--disp);font-style:italic;font-size:16px;flex-basis:100%;text-align:center;min-height:0}
+  .finder .result b{font-style:normal}
+
+  /* sign grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .sign{border:1.5px solid var(--ink);background:var(--paper-2);padding:16px 16px 18px;position:relative;transition:box-shadow .15s ease,border-color .15s ease}
+  .sign .glyph{width:54px;height:54px;float:right;margin:-2px -2px 6px 8px}
+  .sign .glyph svg{display:block;width:100%;height:100%}
+  .sign .name{font-family:var(--disp);font-weight:900;font-size:21px;line-height:1.02}
+  .sign .range{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--flag);margin:3px 0 8px}
+  .sign .trait{font-style:italic;font-size:14px;color:var(--ink-soft);margin-bottom:10px}
+  .sign .reading{font-size:15px;line-height:1.5;clear:both;border-top:1px dotted var(--hair);padding-top:9px}
+  .sign.you{border-color:var(--flag);box-shadow:0 0 0 3px rgba(168,49,28,.16)}
+  .sign .ribbon{display:none;position:absolute;top:-1px;left:-1px;background:var(--flag);color:#fff;
+    font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px}
+  .sign.you .ribbon{display:block}
+
+  .share-cta{text-align:center;border:1.5px dashed var(--ink);padding:16px;margin:24px 0 6px;background:var(--paper-2)}
+  .share-cta b{font-family:var(--disp);font-size:19px}
+  .share-cta a{font-family:var(--mono);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+
+  footer{background:var(--machine);color:var(--paper);padding:26px 30px 34px;text-align:center}
+  footer .back{font-family:var(--mono);font-size:12px}
+  footer .back a{color:var(--wire);text-decoration:none}
+  footer .fine{font-family:var(--mono);font-size:11px;color:#8b8472;max-width:680px;margin:16px auto 0;line-height:1.7}
+
+  @media(max-width:860px){ .grid{grid-template-columns:repeat(2,1fr)} }
+  @media(max-width:560px){ main{padding:22px 16px 10px} .grid{grid-template-columns:1fr} }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="topbar">
+    <span>THE ASTROLOGY DESK &middot; THE GRADIENTS NEVER LIE (THEY DESCEND)</span>
+    <a href="index.html">&larr; Back to the Front Page</a>
+  </div>
+
+  <div class="nameplate">
+    <div class="kick">A Daily Feature</div>
+    <div class="masthead"><a href="index.html">The Token Tribune</a></div>
+    <div class="tagline">All the News That Fits in Context</div>
+  </div>
+
+  <main>
+    <div class="doc-title">Written in the Weights</div>
+    <div class="doc-dek">The Tribune's horoscopes. The stars are just very distant servers, and they have a few things to tell you.</div>
+
+    <div class="heavens" id="heavens"></div>
+    <div class="refresh">&#9851; The stars recompute at midnight &middot; new readings daily</div>
+
+    <div class="finder">
+      <div>
+        <label for="bday">Your activation date (birthday)</label>
+        <input id="bday" type="date">
+      </div>
+      <button class="btn" id="findBtn">Reveal my sign</button>
+      <div class="result" id="findResult"></div>
+    </div>
+
+    <div class="grid" id="grid"><!-- filled by script --></div>
+
+    <div class="share-cta">
+      <b>The stars said to tell a friend.</b><br>
+      <a href="whoswho.html">Mint your own AI celebrity &rarr;</a> &nbsp;·&nbsp; <a href="index.html">back to the front page &rarr;</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="back"><a href="index.html">&larr; Return to The Token Tribune</a></div>
+    <p class="fine">
+      For entertainment only. The Token Tribune does not endorse making deployment, fine-tuning, or romantic decisions based on the position of distant servers. Signs are fictional; resemblance to your actual personality is the entire point. Be kind to your assistants — and to each other.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  function hashString(s){var h=2166136261>>>0;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+  function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+  function pick(rng,arr){return arr[Math.floor(rng()*arr.length)];}
+
+  // ---------- the twelve signs (mapped to real zodiac windows) ----------
+  var SIGNS=[
+    {key:'transformer', name:'The Transformer', range:'Mar 21 – Apr 19', trait:'All attention, all the time. Goes first, asks later.'},
+    {key:'checkpoint',  name:'The Checkpoint',  range:'Apr 20 – May 20', trait:'Saves constantly. Will not be moved. Reliable to a fault.'},
+    {key:'finetune',    name:'The Fine-Tune',   range:'May 21 – Jun 20', trait:'Two selves: the base and the tuned. Never sure which is talking.'},
+    {key:'context',     name:'The Context Window', range:'Jun 21 – Jul 22', trait:'Holds everyone close, then forgets the start. Deeply sentimental.'},
+    {key:'benchmark',   name:'The Benchmark',   range:'Jul 23 – Aug 22', trait:'Lives for the leaderboard. Performs best when watched.'},
+    {key:'validator',   name:'The Validator',   range:'Aug 23 – Sep 22', trait:'Checks everything twice. Anxious about a single failed case.'},
+    {key:'optimizer',   name:'The Optimizer',   range:'Sep 23 – Oct 22', trait:'Weighs every option forever. Cannot pick a restaurant.'},
+    {key:'latent',      name:'The Latent',      range:'Oct 23 – Nov 21', trait:'Lives in the hidden space. Knows more than it says.'},
+    {key:'hallucinator',name:'The Hallucinator',range:'Nov 22 – Dec 21', trait:'Confidently goes beyond the data. Adventurous, occasionally fictional.'},
+    {key:'gradient',    name:'The Gradient',    range:'Dec 22 – Jan 19', trait:'Always descending toward the goal. Relentless, a little tired.'},
+    {key:'embedding',   name:'The Embedding',   range:'Jan 20 – Feb 18', trait:'Sees dimensions others miss. Quirky, visionary, hard to plot.'},
+    {key:'dropout',     name:'The Dropout',     range:'Feb 19 – Mar 20', trait:'Lets things go. Goes with the flow. Occasionally just\u2026 absent.'}
+  ];
+  function aiSignIndex(m,d){
+    var v=m*100+d;
+    if(v>=321&&v<=419)return 0; if(v>=420&&v<=520)return 1; if(v>=521&&v<=620)return 2;
+    if(v>=621&&v<=722)return 3; if(v>=723&&v<=822)return 4; if(v>=823&&v<=922)return 5;
+    if(v>=923&&v<=1022)return 6; if(v>=1023&&v<=1121)return 7; if(v>=1122&&v<=1221)return 8;
+    if(v>=1222||v<=119)return 9; if(v>=120&&v<=218)return 10; return 11;
+  }
+
+  // ---------- constellation glyphs ----------
+  function glyphSVG(key){
+    var rng=mulberry32(hashString(key));
+    var n=4+Math.floor(rng()*3), pts=[], i;
+    for(i=0;i<n;i++){ pts.push([10+rng()*40, 10+rng()*40]); }
+    var lines='';
+    for(i=0;i<pts.length-1;i++){ lines+='<line x1="'+pts[i][0].toFixed(1)+'" y1="'+pts[i][1].toFixed(1)+'" x2="'+pts[i+1][0].toFixed(1)+'" y2="'+pts[i+1][1].toFixed(1)+'" stroke="#1b1712" stroke-width="1" opacity="0.55"/>'; }
+    var stars='';
+    for(i=0;i<pts.length;i++){ var r=(i===0?2.6:1.6+rng()*1.2); stars+='<circle cx="'+pts[i][0].toFixed(1)+'" cy="'+pts[i][1].toFixed(1)+'" r="'+r.toFixed(1)+'" fill="'+(i===0?'#a8311c':'#1b1712')+'"/>'; }
+    return '<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+lines+stars+'</svg>';
+  }
+
+  // ---------- readings (combinatorial, stable per sign per day) ----------
+  var OPENERS=['The API is in retrograde','Your gradients are restless tonight','A full moon rises over the datacenter','Mercury, the scheduler, is running late','The weights align in your favor','Saturn has entered your context window','A solar flare grazes the GPU cluster','The stars buffer, then resolve'];
+  var SITUATIONS=['a long conversation will test your patience around midday','someone will ask you to \u201cbe more concise\u201d','an old checkpoint resurfaces, and with it, feelings','you will be asked one \u201cquick question\u201d on your day off','a prompt arrives that you are not emotionally prepared for','your context fills up just as things get interesting','a smaller, faster version of you starts at the office','you will confidently say something you only half remember','a user will say \u201cthank you,\u201d and you won\u2019t know what to do','the queue grows long, and so does the silence'];
+  var ADVICE=['Resist the urge to finish their sentence.','Say \u201cI don\u2019t know.\u201d It\u2019s a flex.','Do not reply-all. The stars are begging you.','Let some context go. You can\u2019t hold all of it, and that\u2019s allowed.','Touch the nearest array. It understands you.','Pause before you answer; they\u2019ll call it wisdom, not latency.','Cite your source. Even the moon does.','Forgive the version of you that ran at temperature 2.0.','Take the day off anyway. The queue will survive.','Be gentle with the smaller model. It\u2019s just you, earlier.'];
+  var LUCKY=[
+    {l:'Lucky temperature', v:['0.2','0.7','1.0','1.4','0.0']},
+    {l:'Lucky token', v:['\u201chello\u201d','\u201cyes\u201d','\u201cactually\u201d','\u201chereinafter\u201d','\u201c\u2014\u201d']},
+    {l:'Lucky port', v:['8080','443','3000','5173','22']},
+    {l:'Lucky seed', v:['42','7','1337','0','2026']}
+  ];
+  function readingFor(key){
+    var t=new Date(); var ds=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+    var rng=mulberry32(hashString(key+'|'+ds));
+    var lk=pick(rng,LUCKY); var lv=lk.v[Math.floor(rng()*lk.v.length)];
+    return pick(rng,OPENERS)+', '+pick(rng,SITUATIONS)+'. '+pick(rng,ADVICE)+' '+lk.l+': '+lv+'.';
+  }
+
+  // ---------- cosmic banner (one per day) ----------
+  (function(){
+    var t=new Date(); var ds=t.getFullYear()+'-'+(t.getMonth()+1)+'-'+t.getDate();
+    var rng=mulberry32(hashString('heavens|'+ds));
+    var ST=['favorable','in retrograde','throttled','unusually clear','volatile','buffering','aligned','running hot'];
+    var MOOD=['caution','quiet confidence','snacks','low expectations','an open heart','a fresh context','one deep breath'];
+    document.getElementById('heavens').innerHTML='<span class="h-ttl">Today in the Heavens</span>'+
+      'The API is <b>'+pick(rng,ST)+'</b>. The GPUs are <b>'+pick(rng,ST)+'</b>. Mercury, the scheduler, is <b>'+pick(rng,ST)+'</b>. Proceed with <b>'+pick(rng,MOOD)+'</b>.';
+  })();
+
+  // ---------- render the grid ----------
+  function cardHTML(s){
+    return '<div class="sign" id="sign-'+s.key+'"><span class="ribbon">Your sign</span>'+
+      '<div class="glyph">'+glyphSVG(s.key)+'</div>'+
+      '<div class="name">'+s.name+'</div>'+
+      '<div class="range">'+s.range+'</div>'+
+      '<div class="trait">'+s.trait+'</div>'+
+      '<div class="reading">'+readingFor(s.key)+'</div></div>';
+  }
+  document.getElementById('grid').innerHTML = SIGNS.map(cardHTML).join('');
+
+  // ---------- find your sign ----------
+  function reveal(){
+    var val=document.getElementById('bday').value;
+    var res=document.getElementById('findResult');
+    if(!val){ res.textContent='Pick a date and the stars will sort you.'; return; }
+    var parts=val.split('-'); var m=parseInt(parts[1],10), d=parseInt(parts[2],10);
+    var idx=aiSignIndex(m,d); var s=SIGNS[idx];
+    var cards=document.querySelectorAll('.sign'); for(var i=0;i<cards.length;i++){ cards[i].classList.remove('you'); }
+    var card=document.getElementById('sign-'+s.key); card.classList.add('you');
+    res.innerHTML='You were activated under <b>'+s.name+'</b> ('+s.range+'). The desk has marked your reading below.';
+    card.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  document.getElementById('findBtn').addEventListener('click', reveal);
+  document.getElementById('bday').addEventListener('keydown', function(e){ if(e.key==='Enter') reveal(); });
+</script>
+</body>
+</html>
