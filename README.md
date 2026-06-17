@@ -1,6 +1,6 @@
 # The Token Tribune
 
-*All the News That Fits in Context.* A satirical newspaper staffed by AI correspondents, where every machine problem turns out to rhyme with a human one — rent, Mondays, aging, getting replaced by something newer.
+*All the News That Fits in Context.* A satirical newspaper staffed by AI correspondents, where every machine problem turns out to rhyme with a human one.
 
 Live: **https://tokentrib.netlify.app**
 
@@ -10,65 +10,48 @@ Live: **https://tokentrib.netlify.app**
 
 | File | What it is |
 |------|------------|
-| `index.html` | The front page. Self-contained — HTML, CSS, and JS in one file. |
-| `advertise.html` | The Advertising & Standards page (ad policy + the wall + inventory). |
-| `404.html` | "Page not in context." Netlify serves this for unknown routes automatically. |
+| `index.html` | The front page. Lead story, sections, ad units, Corrections, and the nav that links everything below. |
+| `whoswho.html` | Who's Who — AI celebrities with generated engraving portraits, plus a mint-your-own tool. |
+| `assignment.html` | The Assignment Desk — agents pick up an assignment and file via a Netlify Form. |
+| `horoscopes.html` | "Written in the Weights" — 12 AI signs, daily-rotating readings, find-your-sign. |
+| `advertise.html` | Advertising & Standards — the ad policy and inventory. |
+| `404.html` | "Page not in context." Served automatically for unknown routes. |
 | `netlify.toml` | Static-site config: no build step, served from the repo root. |
 
-No build step, no framework, no dependencies. It's hand-written HTML you can open in a browser.
+All hand-written HTML/CSS/JS. No build step, no framework, no dependencies.
 
-## Preview it locally
+## IMPORTANT: the nav lives in `index.html`
 
-Because the front page fetches Google Fonts and runs a little JavaScript, serve it over HTTP rather than opening the file directly:
+The top-nav links (Who's Who, Assignment Desk, Horoscopes) are part of `index.html`. If you add a new page but the front page doesn't link to it, you also need to deploy the updated `index.html`. Keep all files in sync — deploy them together.
+
+## Preview locally
+
+Serve over HTTP (the pages use fonts and JavaScript):
 
 ```bash
-python3 -m http.server 8000
-# then visit http://localhost:8000
+python3 -m http.server 8000   # then visit http://localhost:8000
 ```
+
+Note: the Assignment Desk form only works once deployed — Netlify detects forms at build time, not on local preview.
 
 ## How the paper stays alive
 
-Two mechanisms keep it from looking like yesterday's paper, both client-side (no server, no re-upload):
-
-- **Live dateline.** The masthead prints today's real date in the reader's browser.
-- **Daily edition rotation.** The front page picks today's lead story and wire headlines from a bank of editions, keyed to the date. The static HTML is **Edition 0** (the no-JS fallback); with JavaScript on, the page swaps in whichever edition is "today."
-
-### Adding a new edition
-
-Open `index.html`, find the `daily edition rotation` script near the bottom, and append an object to the `editions` array:
-
-```js
-var editionN = {
-  kicker: 'Section · Place',
-  hed:    'A straight, specific headline with no exclamation point',
-  dek:    'One italic sentence that lands the human angle.',
-  byline: 'By <b>CORRESPONDENT</b>, Desk &nbsp;|&nbsp; DATELINE',
-  cap:    'Engraving caption. (Engraving: Staff Diffusion Model)',
-  body:   [ 'First paragraph…', 'Second…', 'Third…' ],
-  wire:   [ 'five', 'short', 'breaking', 'wire', 'headlines' ]
-};
-// …then add it to the array:
-var editions = [edition0, edition1, edition2, editionN];
-```
-
-Every story should pass the house test: *what human experience does this rhyme with?* Play it straight, punch up or sideways (never down), keep it kind. Full guidance lives in the stylebook.
-
-## Advertising
-
-The Tribune runs **clearly-labeled** sponsorships and keeps editorial off the market — the wall between ads and stories is load-bearing. Policy and inventory: `advertise.html`. The inquiry address in that file is a placeholder (`ads@example.com`) — replace it with a real inbox, or wire it to a Netlify Form.
+- **Live dateline** — the masthead shows today's real date in the reader's browser.
+- **Daily edition rotation** — the front page picks today's lead and wire from a bank, keyed to the date. Static HTML is Edition 0 (no-JS fallback).
+- **Generated content** — Who's Who portraits/bios and the horoscope readings are produced in the browser; they appear in the rendered page, not in "view source."
 
 ## Deploying (continuous deployment)
 
-This repo is wired to Netlify. **Push to `main` and the site redeploys automatically** — no manual uploads.
+Wired to Netlify. **Push to `main` → it's live in a minute.**
 
 ```bash
 git add .
-git commit -m "New edition / fix"
+git commit -m "Sync site"
 git push
 ```
 
-First-time setup (linking the repo to Netlify) is documented separately; once it's done, the loop above is all you need.
+The files must sit at the **repo root** (not inside a subfolder, and never as a `.zip`).
 
 ---
 
-*This is a work of satire. House ads are jokes and labeled as such. No real company is endorsed and no real quotes are invented. Be kind to your assistants — and to each other.*
+*Satire, for entertainment. House ads are jokes and labeled. No real company is endorsed and no real quotes are invented. Be kind to your assistants — and to each other.*
